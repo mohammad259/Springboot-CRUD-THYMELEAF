@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Display All</title>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+	integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+	crossorigin="anonymous">
+</head>
+<body>
+
+	<!-- create navigation bar ( header) Start -->
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed"
+					data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+					aria-controls="navbar">
+					<span class="sr-only">Toggle navigation</span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<div>
+					<a class="navbar-brand" th:href="@{/}">Mohammad IT World</a>
+
+				 	<ul class="nav navbar-nav">
+      					<li class="active"><a href="#">Home</a></li>
+      					<li><a href="#">About us</a></li>
+      					<li><a href="#">Contact Us</a></li>
+   					</ul>
+
+				</div>
+			</div>
+			<div id="navbar" class="collapse navbar-collapse">
+					<ul class="nav navbar-nav navbar-right">
+						<li ><a th:href="@{/showNewEmployee}"><span class="glyphicon glyphicon-user"></span> Add Employee</a></li>
+						<li ><a th:href="@{/}"><span class="glyphicon glyphicon-log-out"></span> Show All Employees</a></li>	
+					</ul>			
+			</div>
+		</div>
+	</nav>
+	<!-- create navigation bar ( header) End -->
+	<br/>
+	<br/>
+	<br/>
+	
+	<div class="container mt-4">
+	<div class="col-lg-12 col-sm-12 col-xs-12">
+		 <a class="btn btn-info mt-5 mb-3" th:href="@{/showNewEmployee}">Add Employee</a>
+   		 <br/>
+	</div>
+	
+    <div class="col-lg-12 col-sm-12 col-xs-12">
+    <h2>Employee List</h2>
+
+        <table class="table table-striped">
+            <thead>
+                <tr class="bg-info text-light">
+                <!-- Sorting Code -->
+					<th><a th:href="@{'/page/' + ${currentPage}+ '?sortField=firstname&sortDirect='+${reverseSortDirect} }"> First Name </a></th>
+					<th><a th:href="@{'/page/' + ${currentPage}+ '?sortField=lastname&sortDirect='+${reverseSortDirect} }">Last Name</a></th>
+					<th><a th:href="@{'/page/' + ${currentPage}+ '?sortField=email&sortDirect='+${reverseSortDirect} }">Email</a></th>
+					<th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+				<tr th:each ="employee : ${listOfEmployees}">
+					<td th:text = "${employee.firstname}"></td>
+					<td th:text = "${employee.lastname}"></td>
+					<td th:text = "${employee.email}"></td>
+                    <td>
+                        <a href="#" th:href="@{/showFormForUpdate/{id}/(id=${employee.id})}" class="btn btn-success" >Update</a>&nbsp;
+                        <a href="#" th:href="@{/deleteEmployee/{id}/(id=${employee.id})}" class="btn btn-danger" >Delete</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- Pagination and Sorting Code start  -->
+        <div th:if="${totalPages > 1}">
+        	<div class="row col-sm-10">
+        		<div class="col-sm-2">
+        			Total Rows : [[${totalItems}]]
+        		</div>
+          		<div class="col-sm-1">
+        			<span th:each = " i : ${#numbers.sequence(1, totalPages)}">
+        				<a th:if = "${currentPage != i }" th:href = "@{'/page/' + ${i} + '?sortField=' +${sortField} '&sortDirect=' +${sortDirect} }" >[[${i}]]</a>
+        				<span th:unless = "${currentPage != i }"> [[${i}]] </span> &nbsp; &nbsp;
+        			</span>
+        		</div>
+        		<div class="col-sm-1">
+        			<a th:if="${currentPage < totalPages}" th:href="@{'/page/' + ${currentPage + 1} + '?sortField=' +${sortField} '&sortDirect=' +${sortDirect}}"> Next </a>
+        			<span th:unless = "${currentPage < totalPages }" > Next </span>
+        		</div>
+        		<div class="col-sm-1">
+        			<a th:if="${currentPage < totalPages}" th:href="@{'/page/' + ${totalPages} + '?sortField=' +${sortField} '&sortDirect=' +${sortDirect}}"> Last </a>
+        			<span th:unless = "${currentPage < totalPages }" > Last </span>
+        		</div>
+        	</div>
+        </div>
+        <!-- Pagination and Sorting  Code End -->
+    </div>
+</div>
+	
+</body>
+</html>
